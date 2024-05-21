@@ -1,0 +1,12 @@
+extend type Mutation{
+    studentLogin(usn: String!,password: String!): String!
+    teacherLogin(usn: String!,password: String!): String!
+    adminLogin(usn: String!,password: String!): String!
+    clubLogin(usn: String!,password: String!): String!
+}
+
+union User = Student | Teacher | Admin | Club
+
+extend type Query{
+    me: User @auth
+}

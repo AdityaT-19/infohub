@@ -1,0 +1,45 @@
+enum Priority{
+    low
+    medium
+    high
+}
+
+
+type Announcement{
+    id: ID!
+    admin: Admin! @belongsTo
+    dept: String
+    priority: Priority!
+    posted_at: DateTime
+    title: String!
+    description: String!
+    file: String!
+}
+
+extend type Query{
+    announcements(
+        priority: Priority @eq
+    ): [Announcement!] @all @orderBy(columns: [
+        {column: "posted_at", order: DESC},
+        {column: "priority", order: ASC}
+    ])
+    announcement(id: ID! @eq): Announcement @find
+}
+
+input CreateAnnouncementBelongsTo{
+    connect: ID
+}
+
+input CreateAnnouncementInput{
+    admin: CreateAnnouncementBelongsTo!
+    dept: String!
+    priority: Priority!
+    title: String!
+    description: String!
+    file: Upload! @upload(disk: "public", path: "images/announcements", public: true)
+}
+
+extend type Mutation{
+    createAnnouncement(input: CreateAnnouncementInput! @spread): Announcement! @create
+    deleteAnnouncement(id: ID! @eq): Announcement! @delete
+}

@@ -1,0 +1,30 @@
+type WifiForm{
+    id: ID!
+    approved: Boolean!
+    student: Student! @belongsTo
+}
+
+extend type Query{
+    wififorms(approved: Boolean @eq): [WifiForm!] @all
+    wifiform(id: ID! @eq): WifiForm @find
+}
+
+input WifiFormBelongsTo{
+    connect: ID!
+}
+
+input WifiFormInput{
+    approved: Boolean!
+    student: WifiFormBelongsTo!
+}
+
+input WifiFormUpdateInput{
+    approved: Boolean!
+}
+
+extend type Mutation{
+    createWifiForm(input: WifiFormInput! @spread): WifiForm! @create
+    updateWifiForm(id: ID!, input: WifiFormUpdateInput! @spread): WifiForm! @update
+    deleteWifiForm(id: ID! @eq): WifiForm! @delete
+}
+

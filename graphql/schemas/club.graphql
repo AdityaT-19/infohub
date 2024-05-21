@@ -1,0 +1,19 @@
+type Club{
+  id: ID!
+  cid: String!
+  name: String!
+  phone: String!
+  email: String!
+  image: String!
+}
+
+extend type Query{
+  clubs: [Club!]! @all
+  club(id: ID! @eq): Club @find
+  clubs_page: [Club!] @paginate
+}
+
+extend type Mutation{
+  createClub(cid: String!, name: String!, phone: String!,password: String! @hash ,email: String!, image: Upload!@upload(disk: "public", path: "images/clubs", public: true)): Club @create
+  deleteClub(id: ID! @eq): Club @delete
+}

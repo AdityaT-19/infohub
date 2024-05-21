@@ -1,0 +1,59 @@
+type ClubEvent{
+    id: ID!
+    title: String!,
+    description: String!
+    venue: String!
+    dateTime: DateTime!
+    image: String!
+    club: Club @belongsTo
+}
+
+type DeptEvent{
+    id: ID!
+    title: String!,
+    description: String!
+    venue: String!
+    dateTime: DateTime!
+    image: String!
+    dept: String!
+}
+
+
+
+extend type Query{
+    clubEvents: [ClubEvent!] @all
+    clubEvent(id: ID!): ClubEvent @find
+    deptEvents: [DeptEvent!] @all
+    deptEvent(id: ID!): DeptEvent @find
+    eventsPage: [ClubEvent!|DeptEvent!] @paginate
+}
+
+
+input ClubEventBelongsTo{
+    connect: ID!
+}
+
+input ClubEventInput{
+    title: String!
+    description: String!
+    venue: String!
+    dateTime: DateTime!
+    image: Upload! @upload(disk: "public", path: "images/events", public: true)
+    club: ClubEventBelongsTo!
+}
+
+input DeptEventInput {
+    title: String!
+    description: String!
+    venue: String!
+    dateTime: DateTime!
+    image: Upload! @upload(disk: "public", path: "images/events", public: true)
+    dept: String!
+}
+
+extend type Mutation{
+    createClubEvent(input: ClubEventInput! @spread): ClubEvent @create
+    deleteClubEvent(id: ID! @eq): ClubEvent @delete
+    createDeptEvent(input: DeptEventInput! @spread): DeptEvent @create
+    deleteDeptEvent(id: ID! @eq): DeptEvent @delete
+}

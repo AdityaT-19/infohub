@@ -1,0 +1,20 @@
+type Teacher{
+  id: ID!
+  tid: String!
+  name: String!
+  branch: String!
+  phone: String!
+  email: String!
+  image: String!
+}
+
+extend type Query{
+  teachers: [Teacher!]! @all
+  teacher(id: ID! @eq): Teacher @find
+  teachers_page: [Teacher!] @paginate
+}
+
+extend type Mutation{
+  createTeacher(tid: String!, name: String!, branch: String!, phone: String!, email: String!, password: String! @hash,image: Upload! @upload(disk: "public", path: "images/teachers", public: true)): Teacher! @create
+  deleteTeacher(id: ID! @eq): Teacher! @delete
+}

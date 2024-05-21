@@ -1,0 +1,41 @@
+type Resource{
+    id: ID!
+    name: String!
+    branch: String!
+    semester: Int!
+    subject: String!
+    is_teacher: Boolean!
+    file: String!
+    teacher: Teacher @belongsTo
+    student: Student @belongsTo
+}
+
+input TeacherInput{
+    connect: ID!
+}
+
+input StudentInput{
+    connect: ID!
+}
+
+input ResourceInput{
+    name: String!
+    branch: String!
+    semester: Int!
+    subject: String!
+    is_teacher: Boolean!
+    file: Upload! @upload(disk: "public", path: "images/resources", public: true)
+    teacher: TeacherInput 
+    student: StudentInput 
+}
+
+extend type Query{
+    resources: [Resource!]! @all
+    resource(id: ID!): Resource @find
+    resourcesByBranchSemSub(branch: String! @eq, semester: Int! @eq, subject: String! @eq): [Resource!]! @all
+}
+
+extend type Mutation{
+    createResource(input: ResourceInput! @spread): Resource @create
+    deleteResource(id: ID! @eq): Resource @delete
+}

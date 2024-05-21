@@ -1,0 +1,18 @@
+type Admin{
+  id: ID!
+  aid: String!
+  name: String!
+  phone: String!
+  email: String!
+}
+
+extend type Query{
+  admins: [Admin!]! @all
+  admin(id: ID! @eq): Admin @find
+  admins_page: [Admin!] @paginate
+}
+
+extend type Mutation{
+  createAdmin(aid: String!, name: String!, phone: String!, email: String!,password: String! @hash): Admin! @create
+  deleteAdmin(id: ID! @eq): Admin @delete
+}

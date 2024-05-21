@@ -1,0 +1,23 @@
+type Student{
+  id: ID!
+  usn: String!
+  name: String!
+  branch: String!
+  semester: Int!
+  phone: String!
+  email: String!
+  image: String
+}
+
+extend type Query{
+  students: [Student!]! @all
+  student(id: ID! @eq): Student @find
+  students_page: [Student!] @paginate
+}
+
+
+
+extend type Mutation{
+  createStudent(usn: String!, name: String!, branch: String!, semester: Int!, password: String! @hash,phone: String!, email: String!,image: Upload! @upload(disk: "public", path: "images/students", public: true)): Student @create
+  deleteStudent(id: ID! @eq): Student @delete
+}
